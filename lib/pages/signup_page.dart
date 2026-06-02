@@ -2,19 +2,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:taskerr/pages/explore_page.dart';
-import 'package:taskerr/pages/signup_page.dart';
+import 'package:taskerr/pages/login_page.dart';
 
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
  
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     
-                    child: Text('Welcome back your next freelance opportunity is waiting!',
+                    child: Text('Create an account and start finding freelance opportunities!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () async {
                        try {
                         await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
+                        .createUserWithEmailAndPassword(
                           email: emailController.text, 
                           password: passwordController.text);
                        }
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
                       } ,
-                      child: const Text ("Login"),
+                      child: const Text ("Sign Up"),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.white,
                       ),
                       children: [
-                        const TextSpan(text: "Don't have an account? Sign up "),
+                        const TextSpan(text: "Already have an account? Login "),
                         TextSpan(
                           text: 'here',
                           style: const TextStyle(
@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                           }
                         ),
                     
