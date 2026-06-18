@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:taskerr/firebase_options.dart';
 import 'package:taskerr/pages/explore_page.dart';
 import 'package:taskerr/pages/login_page.dart';
+import 'package:taskerr/pages/navigation_page.dart';
+import 'package:taskerr/pages/profile_page.dart';
 
 
 
@@ -35,13 +37,18 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
 
       debugShowCheckedModeBanner: false,
+      routes: {
+        
+        '/profile_page': (context) => ProfilePage(),
+
+      },
 
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
 
           if (snapshot.hasData){
-            return const ExplorePage();
+            return const NavigationPage();
           }
           return LoginPage();
          

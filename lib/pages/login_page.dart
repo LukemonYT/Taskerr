@@ -60,6 +60,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   
 
+                 
+
+
 
 
                   Padding(
@@ -77,7 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        hintText: 'Email:',
+                        hintText: 'Enter Email:',
+                        suffixIcon: Icon(Icons.email, color: Colors.grey,),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -100,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
                       controller: passwordController,
-
+                      
                       cursorColor: Colors.black,
                       cursorWidth: 1,
                       style: TextStyle(
@@ -110,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        hintText: 'Password:',
+                        hintText: 'Enter Password:',
+                        suffixIcon: Icon(Icons.password, color: Colors.grey,),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -129,10 +134,19 @@ class _LoginPageState extends State<LoginPage> {
 
                     ),
                   
+                    Padding(
+                      padding: const EdgeInsets.only(left: 200, top: 10,),
+                      child: Text("Forgot Password?",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        
+                      ),
+                      ),
+                    ),
 
 
                   Padding(
-                    padding: const EdgeInsets.only(left: 80, right: 80, top: 15,),
+                    padding: const EdgeInsets.only(left: 80, right: 80, top: 5,),
                     child: ElevatedButton(
                       onPressed: () async {
                        try {
@@ -190,9 +204,9 @@ class _LoginPageState extends State<LoginPage> {
                       ]
                     
                     )),
-                  )
+                  ),
 
-
+                  
                   
                 ],
 

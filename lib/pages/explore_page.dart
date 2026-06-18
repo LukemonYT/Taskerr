@@ -1,85 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
 
   @override
-  State<ExplorePage> createState() => _ExplorePageState();
+  State<ExplorePage> createState() => _ExplorePage();
 }
 
-class _ExplorePageState extends State<ExplorePage> {
+class _ExplorePage extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      appBar: AppBar(
-        backgroundColor: Color(0xFF4cc485),
-        title: Center(
-          child: SizedBox(
-            height: 60,
-            child: Image.asset(
-                          'assets/images/taskerr_logo_white.png', fit: BoxFit.contain,
-                        ),
-          ),
-        ),
-      ),
 
 
+      body: Center(   
 
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Color(0xFF4cc485),
-        showUnselectedLabels: true,
-      
-        items: [
-
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
-       
-          label: 'Explore',
-          
-          
-          
-          ),
-
-        BottomNavigationBarItem(
-          icon: Icon(Icons.backpack),
-         
-          label: 'My Tasks',
-          
-          ),
-
-        BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: 'Messages',
-          ),
-
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
-          ),
+          child: ElevatedButton(
+          onPressed: () async {
+           await FirebaseAuth.instance.signOut();
 
 
-
-
-
-
-
-      ]) ,
-
-      body: Center(
-        child: ListView(
-          
-          
-
-        ),
-
-
-
-      ),
-
-
+          }, 
+          child: Text("Logout")),
+),
     );
+
+      
     
   }
 }

@@ -58,12 +58,44 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     ),
                   ),
+                    
+                     Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40, top: 40,),
+                    child: TextField(
+
+                      controller: emailController,
+
+                      cursorColor: Colors.black,
+                      cursorWidth: 1,
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                      
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Username:',
+                        
+                        hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                        ),
+                        
+              
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        )
+
+                      ),
+          
+                    ),
+                    
+                  ),
+
                   
-
-
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40, top: 50,),
+                   Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
 
                       controller: emailController,
@@ -78,6 +110,42 @@ class _SignupPageState extends State<SignupPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Email:',
+                        
+                        hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                        ),
+                        
+              
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        )
+
+                      ),
+          
+                    ),
+                    
+                  ),
+                
+
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
+                    child: TextField(
+
+                      controller: emailController,
+
+                      cursorColor: Colors.black,
+                      cursorWidth: 1,
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                      
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Password:',
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -110,7 +178,7 @@ class _SignupPageState extends State<SignupPage> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        hintText: 'Password:',
+                        hintText: 'Confirm Password:',
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -140,6 +208,9 @@ class _SignupPageState extends State<SignupPage> {
                         .createUserWithEmailAndPassword(
                           email: emailController.text, 
                           password: passwordController.text);
+                          setState(() {
+                            
+                          });
                        }
                        catch (e) 
                        {
