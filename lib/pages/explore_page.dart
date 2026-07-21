@@ -16,13 +16,7 @@ class _ExplorePage extends State<ExplorePage> {
 
       body: Center(   
 
-          child: ElevatedButton(
-          onPressed: () async {
-           await FirebaseAuth.instance.signOut();
-
-
-          }, 
-          child: Text("Logout")),
+          
 ),
     );
 

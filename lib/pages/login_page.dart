@@ -14,10 +14,14 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+bool isPasswordObscured = true;
+
 class _LoginPageState extends State<LoginPage> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailResetController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         
 
 
-          child: 
-            
-
-            
-              
+          child:  
               Column(
                 children: [
 
@@ -58,13 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     ),
                   ),
-                  
-
-                 
-
-
-
-
+    
                   Padding(
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 50,),
                     child: TextField(
@@ -81,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Enter Email:',
-                        suffixIcon: Icon(Icons.email, color: Colors.grey,),
+                        prefixIcon: Icon(Icons.email, color: Colors.grey,),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -104,19 +98,27 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
                       controller: passwordController,
-                      
+                 
                       cursorColor: Colors.black,
                       cursorWidth: 1,
                       style: TextStyle(
                         fontSize: 13,
+                        
+                        
                       ),
+                      obscureText: isPasswordObscured,
                       
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Enter Password:',
-                        suffixIcon: Icon(Icons.password, color: Colors.grey,),
+                        prefixIcon: Icon(Icons.lock, color: Colors.grey,),
+                        suffixIcon: IconButton(
+                          icon: Icon(isPasswordObscured ? Icons.visibility_off: Icons.visibility, color: Colors.grey,),
+                          onPressed: () => setState(() => isPasswordObscured = !isPasswordObscured),
+                          
                         
+                        ),
                         hintStyle: TextStyle(
                         color: Colors.grey,
                         fontSize: 13,
@@ -129,19 +131,19 @@ class _LoginPageState extends State<LoginPage> {
                         )
 
                       ),
-          
+
                     ),
 
                     ),
                   
-                    Padding(
-                      padding: const EdgeInsets.only(left: 200, top: 10,),
+                    GestureDetector(
+                      onTap: () => showErrorBox(context, emailResetController),
                       child: Text("Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        
+                      style: TextStyle(color: Colors.blue),
+                      
+                      
                       ),
-                      ),
+
                     ),
 
 
@@ -263,4 +265,147 @@ class _LoginPageState extends State<LoginPage> {
 
     
   }
+
+  
+}
+
+void showErrorBox(BuildContext context, final emailResetController,)
+{
+  showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext context)
+  
+  {
+    
+    return Container(
+     height: MediaQuery.of(context).size.height * 0.75,
+     
+      decoration: BoxDecoration(
+        color: Color(0xFF4cc485),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+          )),
+      
+      
+      child: Column(children: [
+
+        Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 45),
+          child: Text('Forgot Your Password?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight(1000),
+                     // fontWeight: FontWeight.bold,
+                      color: Colors.white,
+
+                    ),
+          
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(left: 50, right: 50, top: 20),
+          child: Text('Reset your password here to get back to your freelance opportunities!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                     // fontWeight: FontWeight.bold,
+                      color: Colors.white,
+
+                    ),
+          
+          ),
+        ),
+
+        Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40, top: 30,),
+                    child: TextField(
+
+                      controller: emailResetController,
+
+                      cursorColor: Colors.black,
+                      cursorWidth: 1,
+                      style: TextStyle(
+                        fontSize: 13,
+                      ),
+                      
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Enter Reset Email:',
+                        prefixIcon: Icon(Icons.email, color: Colors.grey,),
+                        
+                        hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                        ),
+                        
+              
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        )
+
+                      ),
+          
+                    ),
+                    
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 80, right: 80, top: 20,),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                       try {
+                        await FirebaseAuth.instance
+                        .sendPasswordResetEmail(
+                          email: emailResetController.text, );
+                          emailResetController.clear();
+                          Navigator.pop(context);
+                       }
+                       catch (e) 
+                       {
+                        if (e.toString() == "[firebase_auth/invalid-email] The email address is badly formatted.")
+                         print("Please check email");
+                        
+                        else (print(""));
+                       };
+
+
+                      } ,
+                      child: const Text ("Reset Password"),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)
+                        )
+                      ),
+                      
+
+                      
+                    ),
+                  ),
+
+
+
+
+
+
+
+
+
+
+      ],),
+
+    );
+      
+    
+  }
+  
+  
+  );
+
+
+
+
 }

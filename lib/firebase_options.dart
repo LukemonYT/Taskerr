@@ -57,22 +57,22 @@ class DefaultFirebaseOptions {
     projectId: 'taskerr-1',
     storageBucket: 'taskerr-1.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB2j_sotVwQlSCB0GLPwPOJr-bLBh_spqo',
     appId: '1:982755619351:ios:b55e7ddd119a572c2b2252',
     messagingSenderId: '982755619351',
     projectId: 'taskerr-1',
     storageBucket: 'taskerr-1.firebasestorage.app',
+    iosClientId: '982755619351-694199rcvnai4dn8h6m4mm0gaji0oe6a.apps.googleusercontent.com',
     iosBundleId: 'com.example.taskerr',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyB2j_sotVwQlSCB0GLPwPOJr-bLBh_spqo',
     appId: '1:982755619351:ios:b55e7ddd119a572c2b2252',
     messagingSenderId: '982755619351',
     projectId: 'taskerr-1',
     storageBucket: 'taskerr-1.firebasestorage.app',
+    iosClientId: '982755619351-694199rcvnai4dn8h6m4mm0gaji0oe6a.apps.googleusercontent.com',
     iosBundleId: 'com.example.taskerr',
   );
 

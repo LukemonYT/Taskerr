@@ -16,8 +16,14 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
 
+  final displayNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  
+  bool isPasswordObscured = true;
+  bool isConfirmPasswordObscured = true;
+  String title = "";
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,7 @@ class _SignupPageState extends State<SignupPage> {
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 40,),
                     child: TextField(
 
-                      controller: emailController,
+                      controller: displayNameController,
 
                       cursorColor: Colors.black,
                       cursorWidth: 1,
@@ -75,6 +81,7 @@ class _SignupPageState extends State<SignupPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Username:',
+                        prefixIcon: Icon(Icons.person, color: Colors.grey,),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -110,6 +117,7 @@ class _SignupPageState extends State<SignupPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Email:',
+                        prefixIcon: Icon(Icons.email, color: Colors.grey,),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -134,8 +142,8 @@ class _SignupPageState extends State<SignupPage> {
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
 
-                      controller: emailController,
-
+                      controller: passwordController,
+                      obscureText: isPasswordObscured,
                       cursorColor: Colors.black,
                       cursorWidth: 1,
                       style: TextStyle(
@@ -146,6 +154,13 @@ class _SignupPageState extends State<SignupPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Password:',
+                        prefixIcon: Icon(Icons.lock, color: Colors.grey,),
+                        suffixIcon: IconButton(
+                          icon: Icon(isPasswordObscured ? Icons.visibility_off: Icons.visibility, color: Colors.grey,),
+                          onPressed: () => setState(() => isPasswordObscured = !isPasswordObscured),
+                          
+                        
+                        ),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -168,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
                       controller: passwordController,
-
+                      obscureText: isConfirmPasswordObscured,
                       cursorColor: Colors.black,
                       cursorWidth: 1,
                       style: TextStyle(
@@ -179,6 +194,13 @@ class _SignupPageState extends State<SignupPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Confirm Password:',
+                        prefixIcon: Icon(Icons.lock_reset, color: Colors.grey,),
+                        suffixIcon: IconButton(
+                          icon: Icon(isConfirmPasswordObscured ? Icons.visibility_off: Icons.visibility, color: Colors.grey,),
+                          onPressed: () => setState(() => isConfirmPasswordObscured = !isConfirmPasswordObscured),
+                          
+                        
+                        ),
                         
                         hintStyle: TextStyle(
                         color: Colors.grey,
@@ -208,18 +230,39 @@ class _SignupPageState extends State<SignupPage> {
                         .createUserWithEmailAndPassword(
                           email: emailController.text, 
                           password: passwordController.text);
+                        
+
+
+
                           setState(() {
                             
                           });
-                       }
-                       catch (e) 
-                       {
-                        if (e.toString() == "[firebase_auth/invalid-email] The email address is badly formatted.")
-                         print("Please check email");
+
+                         await FirebaseAuth.instance.currentUser!.updateDisplayName(displayNameController.text,);
                         
-                        else (print(""));
+                       }
+
+
+                       on FirebaseAuthException catch(e) 
+                       {
+                        if (e.code == "weak-password") { 
+                         title = "Password Too Weak!";
+                         message = "Please ensure the password is atleast 6 characters long.";
+                        }
+                        else if (e.code == "email-already-in-use") {
+                          message = "An account already exists with that email.";
+                        }
+                        else if (e.code == "invalid-email") {
+                          title = "Invalid Email Address!";
+                          message = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
+                        }
+                        else { message = "Please ensure all fields have been correctly filled";}
+                        showErrorBox(context);
+
+                        
                        };
 
+                 
 
                       } ,
                       child: const Text ("Sign Up"),
@@ -319,5 +362,40 @@ class _SignupPageState extends State<SignupPage> {
 
 
     
+  }
+
+  void showErrorBox(BuildContext context) {
+    showDialog(context: context, builder: (BuildContext context) 
+    {
+      return AlertDialog(
+        backgroundColor: Color(0xFF4cc485),
+        title: Text(title,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight(600)
+        ),
+        ),
+        content: Text(message,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+
+        ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: Navigator.of(context).pop,
+             child: Text("Okay",
+             style: TextStyle(
+             color: Colors.black
+            ),
+          ))
+        ],
+      );
+    }
+    
+    
+    );
   }
 }
