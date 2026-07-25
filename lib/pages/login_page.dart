@@ -15,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 bool isPasswordObscured = true;
+String errorTitle = "";
+String errorMessage = "";
 
 class _LoginPageState extends State<LoginPage> {
 
@@ -137,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   
                     GestureDetector(
-                      onTap: () => showErrorBox(context, emailResetController),
+                      onTap: () => showResetBox(context, emailResetController),
                       child: Text("Forgot Password?",
                       style: TextStyle(color: Colors.blue),
                       
@@ -152,19 +154,42 @@ class _LoginPageState extends State<LoginPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                        try {
+                        if (emailController.text == ""){
+                          throw FirebaseAuthException(code: "invalid-email");
+                        }
+                         else if (passwordController.text == ""){
+                          throw FirebaseAuthException(code: "invalid-credential");
+                         }
+                         
+                      
                         await FirebaseAuth.instance
                         .signInWithEmailAndPassword(
                           email: emailController.text, 
                           password: passwordController.text);
                        }
-                       catch (e) 
+                        on FirebaseAuthException catch (e) 
                        {
-                        if (e.toString() == "[firebase_auth/invalid-email] The email address is badly formatted.")
-                         print("Please check email");
-                        
-                        else (print(""));
-                       };
+                         if (e.code == "invalid-email")
+                         {
+                            errorTitle = "Invalid Email Address!";
+                            errorMessage = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
+                         }
+                         else if (e.code == "invalid-credential"){
+                            errorTitle = "Invalid Password";
+                            errorMessage = "Please ensure the password is correct or reset password.";
+                         }
+                         else if (e.code == "network-request-failed"){
+                            errorTitle = "Not Connected!";
+                            errorMessage = "Please ensure that you are connected to the internet.";
+                         }
+                         else {
+                            errorTitle = "Something Went Wrong!";
+                            errorMessage = "Please try again later or contact support.";
+                         }
 
+                         showErrorBox(context);
+                       };
+                        
 
                       } ,
                       child: const Text ("Login"),
@@ -269,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
   
 }
 
-void showErrorBox(BuildContext context, final emailResetController,)
+void showResetBox(BuildContext context, final emailResetController,)
 {
   showModalBottomSheet(context: context, isScrollControlled: true, builder: (BuildContext context)
   
@@ -405,7 +430,42 @@ void showErrorBox(BuildContext context, final emailResetController,)
   
   );
 
-
+  
 
 
 }
+
+void showErrorBox(BuildContext context) {
+    showDialog(context: context, builder: (BuildContext context) 
+    {
+      return AlertDialog(
+        backgroundColor: Color(0xFF4cc485),
+        title: Text(errorTitle,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight(600)
+        ),
+        ),
+        content: Text(errorMessage,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+
+        ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: Navigator.of(context).pop,
+             child: Text("Okay",
+             style: TextStyle(
+             color: Colors.black
+            ),
+          ))
+        ],
+      );
+    }
+    
+    
+    );
+  }

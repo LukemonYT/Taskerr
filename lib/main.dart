@@ -2,11 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:taskerr/admin_page.dart';
 import 'package:taskerr/firebase_options.dart';
 import 'package:taskerr/pages/explore_page.dart';
 import 'package:taskerr/pages/login_page.dart';
 import 'package:taskerr/pages/navigation_page.dart';
 import 'package:taskerr/pages/profile_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+final db = FirebaseFirestore.instance;
+
 
 
 
@@ -34,7 +40,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final user = FirebaseAuth.instance.currentUser;
+     final user = FirebaseAuth.instance.currentUser;
 
     return MaterialApp(
 
@@ -49,8 +55,28 @@ class MainApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
 
+
           if (snapshot.hasData){
-            return const NavigationPage();
+            return FutureBuilder<DocumentSnapshot>
+            (future: FirebaseFirestore.instance.collection('admins').doc(FirebaseAuth.instance.currentUser!.email).get(),
+            builder: (context, adminSnapshot) {
+              final data = adminSnapshot.data?.data() as Map<String, dynamic>?;
+              if (adminSnapshot.hasData && adminSnapshot.data!.exists){
+              if (data?['isAdmin'] == true)
+              {
+                return AdminPage();
+                
+              }
+              else {
+                return NavigationPage();
+              }
+              
+              }
+              return NavigationPage();
+            }
+            );
+            
+            
           }
           return LoginPage();
          

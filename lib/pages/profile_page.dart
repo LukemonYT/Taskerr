@@ -6,8 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cached_network_image_ce/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-
+final db = FirebaseFirestore.instance;
 
 void testStorageConnection() {
   // Access your default Cloud Storage bucket instance
@@ -48,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
 
    
-    
+   
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -98,7 +99,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     final storageRef = FirebaseStorage.instance.ref().child('users/$uid/profile_picture.jpg');
                     await storageRef.putFile(profileImage!);
                     url = await storageRef.getDownloadURL();
+                    
+                    await db.collection('users').doc(user.uid).set({
+                      
+                      'profileImageURL': url
+                    });
+      
+            
+
                     setState(() {
+
                       
                     });
                  }
@@ -118,6 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ElevatedButton(
                 onPressed: () async {
                 await FirebaseAuth.instance.signOut();
+                
                 }, 
                 child: Text("Logout")),
               

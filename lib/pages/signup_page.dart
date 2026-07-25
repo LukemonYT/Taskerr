@@ -19,11 +19,12 @@ class _SignupPageState extends State<SignupPage> {
   final displayNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   
   bool isPasswordObscured = true;
   bool isConfirmPasswordObscured = true;
-  String title = "";
-  String message = "";
+  String errorTitle = "";
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
                     child: TextField(
-                      controller: passwordController,
+                      controller: confirmPasswordController,
                       obscureText: isConfirmPasswordObscured,
                       cursorColor: Colors.black,
                       cursorWidth: 1,
@@ -226,6 +227,19 @@ class _SignupPageState extends State<SignupPage> {
                     child: ElevatedButton(
                       onPressed: () async {
                        try {
+                          if (displayNameController.text == ""){
+                            throw FirebaseAuthException(code: 'invalid-display-name');
+                          }
+                          else if (emailController.text == ""){
+                            throw FirebaseAuthException(code: "invalid-email");
+                          }
+                        
+                          else if (passwordController.text == ""){
+                            throw FirebaseAuthException(code: "weak-password");
+                          }
+                          else if (passwordController.text != confirmPasswordController.text){
+                            throw FirebaseAuthException(code: 'confirm-password-does-not-match-password');
+                          }
                         await FirebaseAuth.instance
                         .createUserWithEmailAndPassword(
                           email: emailController.text, 
@@ -237,26 +251,44 @@ class _SignupPageState extends State<SignupPage> {
                           setState(() {
                             
                           });
+                          
+                            await FirebaseAuth.instance.currentUser!.updateDisplayName(displayNameController.text,);
 
-                         await FirebaseAuth.instance.currentUser!.updateDisplayName(displayNameController.text,);
+                          
                         
                        }
 
 
-                       on FirebaseAuthException catch(e) 
+                       on FirebaseAuthException catch(e)
                        {
                         if (e.code == "weak-password") { 
-                         title = "Password Too Weak!";
-                         message = "Please ensure the password is atleast 6 characters long.";
+                         errorTitle = "Password Too Weak!";
+                         errorMessage = "Please ensure the password is atleast 6 characters long.";
                         }
                         else if (e.code == "email-already-in-use") {
-                          message = "An account already exists with that email.";
+                          errorMessage = "An account already exists with that email.";
                         }
                         else if (e.code == "invalid-email") {
-                          title = "Invalid Email Address!";
-                          message = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
+                          errorTitle = "Invalid Email Address!";
+                          errorMessage = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
                         }
-                        else { message = "Please ensure all fields have been correctly filled";}
+                        else if (e.code == "network-request-failed"){
+                          errorTitle = "Not Connected!";
+                          errorMessage = "Please ensure that you are connected to the internet.";
+
+                        }
+                        else if (e.code == "invalid-display-name"){
+                          errorTitle = "Name Required!";
+                          errorMessage = "Please ensure a name is entered.";
+                        }
+                        else if (e.code == "confirm-password-does-not-match-password"){
+                          errorTitle = "Password Does Not Match!";
+                          errorMessage = "Please ensure password and confirm password match.";
+                        }
+                        else { 
+                          errorTitle = "Something Went Wrong!";
+                          errorMessage = "Please try again later or contact support.";
+                          }
                         showErrorBox(context);
 
                         
@@ -369,14 +401,14 @@ class _SignupPageState extends State<SignupPage> {
     {
       return AlertDialog(
         backgroundColor: Color(0xFF4cc485),
-        title: Text(title,
+        title: Text(errorTitle,
         style: TextStyle(
           color: Colors.white,
           fontSize: 25,
           fontWeight: FontWeight(600)
         ),
         ),
-        content: Text(message,
+        content: Text(errorMessage,
         style: TextStyle(
           color: Colors.white,
           fontSize: 18,
