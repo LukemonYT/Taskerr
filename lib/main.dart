@@ -9,6 +9,8 @@ import 'package:taskerr/pages/login_page.dart';
 import 'package:taskerr/pages/navigation_page.dart';
 import 'package:taskerr/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pwa_install/pwa_install.dart';
+
 
 
 final db = FirebaseFirestore.instance;
@@ -17,6 +19,10 @@ final db = FirebaseFirestore.instance;
 
 
 void main() async {
+
+  
+
+  
   
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -40,9 +46,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    
+
      final user = FirebaseAuth.instance.currentUser;
 
     return MaterialApp(
+
+      
 
       debugShowCheckedModeBanner: false,
       routes: {
@@ -79,6 +89,7 @@ class MainApp extends StatelessWidget {
             
           }
           return LoginPage();
+          
          
           }
 

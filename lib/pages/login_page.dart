@@ -27,262 +27,274 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      backgroundColor: Color(0xFF4cc485),
-      
-      body: SingleChildScrollView(
-        
-
-
-          child:  
-              Column(
-                children: [
-
-                 Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30, top: 220,),
-                    child: Image.asset(
-                      'assets/images/taskerr_logo_white.png',
-                    ),
-                  ),
-
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
-                    
-                    child: Text('Welcome back your next freelance opportunity is waiting!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 22,
-                     // fontWeight: FontWeight.bold,
-                      color: Colors.white,
-
-                    ),
-                    ),
-                  ),
     
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40, top: 50,),
-                    child: TextField(
-
-                      controller: emailController,
-
-                      cursorColor: Colors.black,
-                      cursorWidth: 1,
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                      
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Enter Email:',
-                        prefixIcon: Icon(Icons.email, color: Colors.grey,),
-                        
-                        hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 13,
-                        ),
-                        
-              
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
-                        )
-
-                      ),
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 600),
+        child: Scaffold(
           
-                    ),
-                    
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
-                    child: TextField(
-                      controller: passwordController,
-                 
-                      cursorColor: Colors.black,
-                      cursorWidth: 1,
-                      style: TextStyle(
-                        fontSize: 13,
-                        
-                        
-                      ),
-                      obscureText: isPasswordObscured,
-                      
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Enter Password:',
-                        prefixIcon: Icon(Icons.lock, color: Colors.grey,),
-                        suffixIcon: IconButton(
-                          icon: Icon(isPasswordObscured ? Icons.visibility_off: Icons.visibility, color: Colors.grey,),
-                          onPressed: () => setState(() => isPasswordObscured = !isPasswordObscured),
-                          
-                        
+          backgroundColor: Color(0xFF4cc485),
+          
+          body: SingleChildScrollView(
+            
+        
+        
+              child:  
+                  Column(
+                    children: [
+        
+                     Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30, top: 100,),
+                        child: Image.asset(
+                          'assets/images/taskerr_logo_white.png',
                         ),
-                        hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 13,
+                      ),
+        
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
+                        
+                        child: Text('Welcome back your next freelance opportunity is waiting!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                         // fontWeight: FontWeight.bold,
+                          color: Colors.white,
+        
                         ),
-                        
-              
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
-                        )
-
+                        ),
                       ),
-
-                    ),
-
-                    ),
-                  
-                    GestureDetector(
-                      onTap: () => showResetBox(context, emailResetController),
-                      child: Text("Forgot Password?",
-                      style: TextStyle(color: Colors.blue),
-                      
-                      
-                      ),
-
-                    ),
-
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 80, right: 80, top: 5,),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                       try {
-                        if (emailController.text == ""){
-                          throw FirebaseAuthException(code: "invalid-email");
-                        }
-                         else if (passwordController.text == ""){
-                          throw FirebaseAuthException(code: "invalid-credential");
-                         }
-                         
-                      
-                        await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                          email: emailController.text, 
-                          password: passwordController.text);
-                       }
-                        on FirebaseAuthException catch (e) 
-                       {
-                         if (e.code == "invalid-email")
-                         {
-                            errorTitle = "Invalid Email Address!";
-                            errorMessage = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
-                         }
-                         else if (e.code == "invalid-credential"){
-                            errorTitle = "Invalid Password";
-                            errorMessage = "Please ensure the password is correct or reset password.";
-                         }
-                         else if (e.code == "network-request-failed"){
-                            errorTitle = "Not Connected!";
-                            errorMessage = "Please ensure that you are connected to the internet.";
-                         }
-                         else {
-                            errorTitle = "Something Went Wrong!";
-                            errorMessage = "Please try again later or contact support.";
-                         }
-
-                         showErrorBox(context);
-                       };
-                        
-
-                      } ,
-                      child: const Text ("Login"),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                        )
-                      ),
-                      
-
-                      
-                    ),
-                  ),
-                
-               
-                  
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20,),
-                    child: RichText(text: TextSpan(
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                      children: [
-                        const TextSpan(text: "Don't have an account? Sign up "),
-                        TextSpan(
-                          text: 'here',
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40, right: 40, top: 50,),
+                        child: TextField(
+        
+                          controller: emailController,
+        
+                          cursorColor: Colors.black,
+                          cursorWidth: 1,
+                          style: TextStyle(
+                            fontSize: 13,
                           ),
-                          recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
-                          }
-                        ),
-                    
-                      ]
-                    
-                    )),
-                  ),
-
+                          
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter Email:',
+                            prefixIcon: Icon(Icons.email, color: Colors.grey,),
+                            
+                            hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                            ),
+                            
                   
-                  
-                ],
-
-
-              ),
-
-             
-
-          
-
-            
-
-
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            )
+        
+                          ),
               
+                        ),
+                        
+                      ),
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40, right: 40, top: 10,),
+                        child: TextField(
+                          controller: passwordController,
+                     
+                          cursorColor: Colors.black,
+                          cursorWidth: 1,
+                          style: TextStyle(
+                            fontSize: 13,
+                            
+                            
+                          ),
+                          obscureText: isPasswordObscured,
+                          
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter Password:',
+                            prefixIcon: Icon(Icons.lock, color: Colors.grey,),
+                            suffixIcon: IconButton(
+                              icon: Icon(isPasswordObscured ? Icons.visibility_off: Icons.visibility, color: Colors.grey,),
+                              onPressed: () => setState(() => isPasswordObscured = !isPasswordObscured),
+                              
+                            
+                            ),
+                            hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                            ),
+                            
+                  
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide.none,
+                            )
+        
+                          ),
+        
+                        ),
+        
+                        ),
+                      
+                        GestureDetector(
+                          onTap: () => showResetBox(context, emailResetController),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 50),
+                            child: Align(
+                              alignment: AlignmentGeometry.centerRight,
+                              child: Text("Forgot Password?",
+                              style: TextStyle(color: Colors.blue),
+                              
+                              
+                              ),
+                            ),
+                          ),
+        
+                        ),
+        
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 80, right: 80, top: 5,),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                           try {
+                            if (emailController.text == ""){
+                              throw FirebaseAuthException(code: "invalid-email");
+                            }
+                             else if (passwordController.text == ""){
+                              throw FirebaseAuthException(code: "invalid-credential");
+                             }
+                             
+                          
+                            await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                              email: emailController.text, 
+                              password: passwordController.text);
+                           }
+                            on FirebaseAuthException catch (e) 
+                           {
+                             if (e.code == "invalid-email")
+                             {
+                                errorTitle = "Invalid Email Address!";
+                                errorMessage = "Please ensure the email address includes '@' symbol and a domain (e.g. @gmail.com).";
+                             }
+                             else if (e.code == "invalid-credential"){
+                                errorTitle = "Invalid Password";
+                                errorMessage = "Please ensure the password is correct or reset password.";
+                             }
+                             else if (e.code == "network-request-failed"){
+                                errorTitle = "Not Connected!";
+                                errorMessage = "Please ensure that you are connected to the internet.";
+                             }
+                             else {
+                                errorTitle = "Something Went Wrong!";
+                                errorMessage = "Please try again later or contact support.";
+                             }
+        
+                             showErrorBox(context);
+                           };
+                            
+        
+                          } ,
+                          child: const Text ("Login"),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)
+                            )
+                          ),
+                          
+        
+                          
+                        ),
+                      ),
+                    
+                   
+                      
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20,),
+                        child: RichText(text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                          children: [
+                            const TextSpan(text: "Don't have an account? Sign up "),
+                            TextSpan(
+                              text: 'here',
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
+                              }
+                            ),
+                        
+                          ]
+                        
+                        )),
+                      ),
+        
+                      
+                      
+                    ],
+        
+        
+                  ),
+        
+                 
+        
+              
+        
+                
+        
+        
+                  
+                
+           
+        
+             
+              
+        
+              
+        
+              
+             
+        
+              
+              
+        
+        
+             
+              
+             
+        
+        
+              
+            )
             
-       
-
-         
-          
-
-          
-
-          
-         
-
-          
-          
-
-
-         
-          
-         
-
-
-          
-        )
         
-
+            
+          
+            
+            
+            
         
-      
+        
+          
         
         
         
-
-
-      
-
-
-
+        ),
+      ),
     );
 
       

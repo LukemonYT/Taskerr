@@ -1,11 +1,12 @@
 {
-    "name": "taskerr",
-    "short_name": "taskerr",
-    "start_url": ".",
+    "name": "Taskerr",
+    "short_name": "Taskerr",
+    "display_override": ["standalone", "window-controls-overlay"],
+    "start_url": "/?pwa=true",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#4cc485",
+    "theme_color": "#4cc485",
+    "description": "A freelance job app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:taskerr/pages/create_task_page.dart';
 import 'package:taskerr/pages/profile_page.dart';
+import 'package:taskerr/pages/view_my_task_page.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
@@ -39,6 +40,7 @@ class _TasksPageState extends State<TasksPage> {
               .collection('users')
               .doc(user.uid)
               .collection("tasks")
+              .orderBy('createdAt', descending: true)
               .snapshots()
               ,
               builder:
@@ -76,7 +78,7 @@ class _TasksPageState extends State<TasksPage> {
                             height: 100,
                             width: 64,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 2,),),
+                            placeholder: (context, url) => const Center(child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white,),),
                             imageUrl: data.docs[index]['imageUrls'][0],
                             errorBuilder: (context, url, error) => Image.asset('assets/images/blank_profile.png'),
                           
@@ -112,6 +114,17 @@ class _TasksPageState extends State<TasksPage> {
                           fontWeight: FontWeight.w900,
                         ),
                         ),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ViewMyTaskPage(
+                            title: data.docs[index]['title'],
+                            budget: data.docs[index]['budget'],
+                            location: data.docs[index]['location'],
+                            description: data.docs[index]['description'],
+                            images: data.docs[index]['imageUrls'],
+                            id: data.docs[index].id,
+                            isApproved: data.docs[index]['isApproved'],
+                            ) ));
+                        },
                         
                       ),
                     );
@@ -124,13 +137,19 @@ class _TasksPageState extends State<TasksPage> {
 
           ),
 
-          FloatingActionButton(
-            backgroundColor: Color(0xFF4cc485),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => CreateTaskPage()));
-            },
-          
-          child: Icon(Icons.add, color: Colors.white,) ,),
+          Align(
+            alignment: AlignmentGeometry.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20, bottom: 20,),
+              child: FloatingActionButton(
+                backgroundColor: Color(0xFF43B07A),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreateTaskPage()));
+                },
+              
+              child: Icon(Icons.add, color: Colors.white,) ,),
+            ),
+          ),
 
 
           
