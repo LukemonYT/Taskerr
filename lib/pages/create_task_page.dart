@@ -18,6 +18,8 @@ class CreateTaskPage extends StatefulWidget {
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
+
+  //Global Variables
   final db = FirebaseFirestore.instance;
   final user = FirebaseAuth.instance.currentUser!;
   final titleController = TextEditingController();
@@ -26,7 +28,6 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   final discriptionController = TextEditingController();
   List<XFile>? pickedImages = [];
   List<XFile>? selectedImages = [];
- 
   List<String> imageUrls = [];
   int num = -1;
   bool uploadingImages = true;
@@ -39,15 +40,18 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
+        //Sets the max width to be 600, so view on desktop does not look stretched as ui is designed for mobile
         constraints: BoxConstraints(maxWidth: 600),
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Color(0xFF4cc485),
+            //Adds back button to page
             leading: BackButton(
               color: Colors.white,
             ),
           ),
           backgroundColor: Color(0xFF4cc485),
+          //Allows scrolling on the page
           body: SingleChildScrollView(
             
             child: Column(

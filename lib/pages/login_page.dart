@@ -7,9 +7,6 @@ import 'package:taskerr/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
- 
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -24,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   final emailResetController = TextEditingController();
   
-
   @override
   Widget build(BuildContext context) {
     
@@ -36,9 +32,6 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Color(0xFF4cc485),
           
           body: SingleChildScrollView(
-            
-        
-        
               child:  
                   Column(
                     children: [
